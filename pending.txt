@@ -1,0 +1,27 @@
+1. Validation on backend and show these messages on frontend
+2. Responsive of home page Front-End
+
+
+
+This is the structure of a object of blog
+
+{
+  title: "Learn React in 7 Days",
+  slug: "learn-react-in-7-days",
+  author: "John Doe",
+  image: "https://example.com/images/react-blog.jpg",
+  description: "<p>This is the full content of the blog post...</p>",
+  excerpt: "A beginner's guide to learning React.js...",
+  category: "Web Development",
+  tags: ["React", "JavaScript", "Frontend"],
+  publishDate: "2025-04-13T10:00:00Z",
+  status: "published",
+  readTime: "7 min read",
+  views: 124,
+  likes: 34,
+  isFeatured: true,
+  metaTitle: "Learn React Quickly",
+  metaDescription: "An easy way to start building apps with React.js",
+  createdAt: "2025-04-12T09:00:00Z",
+  updatedAt: "2025-04-13T09:30:00Z"
+}

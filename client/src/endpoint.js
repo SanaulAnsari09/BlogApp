@@ -1,0 +1,9 @@
+export const signup = "/signup";
+export const login = "/login";
+export const addPost = "/addpost";
+export const updatePost = "/updatepost";
+export const deletePostByUser = "/deletepostbyuser";
+export const allPostByUser = "/allpostbyuserid";
+export const allPots = "/allpost";
+export const allCategoryList = "/allcategorylist";
+export const postListByCategory = "postlistbycategory";

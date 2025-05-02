@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.ql-toolbar.ql-snow{
+    border: none !important;
+    background-color: #F9FAFB;
+}
+.ql-container.ql-snow{
+    border: none !important;
+    background-color: #F9FAFB;
+    min-height: 10rem;
+}
