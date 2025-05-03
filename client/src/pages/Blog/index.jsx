@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../component/Layout";
 import { allPots } from "../../endpoint";
 import { axiosPost } from "../../axiosInstance";
+import { NavLink } from "react-router-dom";
 const dummyImage =
   "https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D";
 
@@ -15,8 +16,11 @@ const Blog = () => {
       const { data } = await axiosPost.get(allPots);
       setPostList(data?.PostList);
       setLoading(false);
+
+      console.log("all-post", data);
     } catch (error) {
       console.log(error);
+      console.log("allpost-err", error);
     }
   }
 
@@ -31,9 +35,10 @@ const Blog = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {postList?.map((post) => {
               return (
-                <div
+                <NavLink
                   className="min-h-70 w-full bg-gray-100 p-1 rounded-md flex flex-col justify-between"
                   key={post?._id}
+                  to={`/singlepost/${post?._id}`}
                 >
                   <div className="h-[60%] w-full rounded-sm">
                     <img
@@ -46,15 +51,14 @@ const Blog = () => {
                     <h4 className="text-sm md:text-md lg:text-lg font-medium text-gray-700 leading-[16px] md:leading-[20px]">
                       {post?.Title}
                     </h4>
-                    <p
+                    <div
                       className="text-ellipsis line-clamp-3 overflow-hidden 
                     leading-[14px] lg:leading-[20px] text-xs md:text-sm lg:text-md
                 "
-                    >
-                      {post?.Description}
-                    </p>
+                      dangerouslySetInnerHTML={{ __html: post?.Description }}
+                    ></div>
                   </div>
-                </div>
+                </NavLink>
               );
             })}
           </div>

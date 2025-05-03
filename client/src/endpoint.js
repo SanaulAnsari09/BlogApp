@@ -7,3 +7,4 @@ export const allPostByUser = "/allpostbyuserid";
 export const allPots = "/allpost";
 export const allCategoryList = "/allcategorylist";
 export const postListByCategory = "postlistbycategory";
+export const singlepostById = "singlepost";

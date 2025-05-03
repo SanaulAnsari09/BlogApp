@@ -6,7 +6,9 @@ const {
   deletePostsByUserController,
   handleAllPostController,
   handleAllCategoryListController,
-  handleCategoryWiseFitlerContorller
+  handleCategoryWiseFitlerContorller,
+  handleSinglePostContorller,
+  latestPostController
 } = require("../controller/post");
 
 const router = express.Router();
@@ -18,5 +20,7 @@ router.post("/deletepostbyuser", deletePostsByUserController);
 router.get("/allpost", handleAllPostController);
 router.get("/allcategorylist", handleAllCategoryListController);
 router.get("/postlistbycategory", handleCategoryWiseFitlerContorller);
+router.post("/singlepost", handleSinglePostContorller);
+router.get("/latestpost", latestPostController)
 
 module.exports = router;

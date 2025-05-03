@@ -10,6 +10,7 @@ import Post from "../pages/Post";
 import Blog from "../pages/Blog";
 import Profile from "../pages/Profile/index";
 import SingleCategoryList from "../pages/Category/SigleCategoryList";
+import SinglePost from "../pages/SinglePost";
 
 const index = () => {
   const allRoutes = [
@@ -40,6 +41,10 @@ const index = () => {
     {
       path: "/profile",
       component: <Profile />,
+    },
+    {
+      path: "/singlepost/:id",
+      component: <SinglePost />,
     },
   ];
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../component/Layout";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { axiosPost } from "../../../axiosInstance";
 import { postListByCategory } from "../../../endpoint";
 const dummyImage =
@@ -31,7 +31,8 @@ const SingleCategoryList = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {postList?.map((post) => {
               return (
-                <div
+                <NavLink
+                  to={`/singlepost/${post?._id}`}
                   className="min-h-70 w-full bg-gray-100 p-1 rounded-md flex flex-col justify-between"
                   key={post?._id}
                 >
@@ -50,11 +51,12 @@ const SingleCategoryList = () => {
                       className="text-ellipsis line-clamp-3 overflow-hidden 
                     leading-[14px] lg:leading-[20px] text-xs md:text-sm lg:text-md
                 "
+                dangerouslySetInnerHTML={{__html:post?.Description}}
                     >
-                      {post?.Description}
+                      
                     </p>
                   </div>
-                </div>
+                </NavLink>
               );
             })}
           </div>

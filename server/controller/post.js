@@ -1,4 +1,5 @@
 const Post = require("../modal/Post");
+const cloudinary = require("../config/cloudinary");
 
 const handleAddPostController = async (req, res) => {
   try {
@@ -10,9 +11,25 @@ const handleAddPostController = async (req, res) => {
         .json({ Message: "All field's are required", Success: false });
     }
 
+    let imageUrl = "";
+
+    
+    if (body?.Image) {
+      console.log("images-s")
+      const result = await cloudinary.uploader.upload(body?.Image, {
+        folder: "Post",
+      });
+      console.log("images-b")
+
+      imageUrl = result.secure_url;
+    }
+
+    console.log("image-url", imageUrl);
+
     const addPost = await Post.insertOne({
       ...body,
       UserId: user._id?.toString(),
+      Image: imageUrl,
     });
 
     if (addPost) {
@@ -23,6 +40,7 @@ const handleAddPostController = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log('image-error', error);
     return res.status(500).json({ Message: error.message, Success: false });
   }
 };
@@ -163,6 +181,42 @@ const handleCategoryWiseFitlerContorller = async (req, res) => {
   }
 };
 
+const handleSinglePostContorller = async (req, res) => {
+  try {
+    const postId = req.query?.Id;
+
+    if (postId) {
+      const post = await Post.findById(postId);
+
+      return res.status(200).json({
+        Message: "Post fetched successfully !",
+        Success: true,
+        Post: post,
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ Message: "Must be post id", success: false });
+    }
+  } catch (error) {
+    return res.status(500).json({ Message: error?.message, Status: false });
+  }
+};
+
+const latestPostController = async (req, res) => {
+  try {
+    const post = await Post.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      Message: "Latest post fetched successfully !",
+      Success: true,
+      LatestPost: post,
+    });
+  } catch (error) {
+    return res.status(500).json({ Message: error?.message, Success: false });
+  }
+};
+
 module.exports = {
   handleAddPostController,
   handleUpdatePostController,
@@ -171,4 +225,6 @@ module.exports = {
   handleAllPostController,
   handleAllCategoryListController,
   handleCategoryWiseFitlerContorller,
+  handleSinglePostContorller,
+  latestPostController,
 };
