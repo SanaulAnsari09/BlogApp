@@ -67,10 +67,14 @@ const handleLoginUser = async (req, res) => {
 
     res.status(200).json({
       Message: "User login successfully !",
-      Token: token,
+      User: {
+        Id: findUser?._id,
+        Name: `${findUser?.FirstName} ${findUser?.LastName}`,
+        Profile: findUser?.Profile,
+        Token: token,
+      },
       Success: true,
     });
-    
   } catch (error) {
     if (!findUser) {
       return res.status(200).json({ Message: error?.message, Success: false });
@@ -89,7 +93,5 @@ async function hashedPassword(password) {
     throw new Error("Failed to hash password");
   }
 }
-
-
 
 module.exports = { handleSignupUser, handleLoginUser };

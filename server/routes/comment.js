@@ -1,8 +1,12 @@
 const express = require("express");
-const { handleAddCommentController } = require("../controller/comment");
+const {
+  handleAddCommentController,
+  handleGetCommentByPostIdController,
+} = require("../controller/comment");
 
 const router = express.Router();
 
 router.post("/addcomment", handleAddCommentController);
+router.get("/getcomments", handleGetCommentByPostIdController);
 
-module.exports = router
+module.exports = router;
