@@ -14,13 +14,21 @@ export const axiosPost = axios.create({
   },
 });
 
+export const axiosComment = axios.create({
+  baseURL: "http://localhost:8080/comment",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 axiosPost.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem("authToken");
-
-      if (token) {
-        config.headers.Authorization = token;
+      const user = localStorage.getItem("authToken");
+      const parsedUser = JSON.parse(user);
+      console.log("set-user1", user);
+      if (parsedUser?.Token) {
+        config.headers.Authorization = parsedUser?.Token;
       }
       return config;
     } catch (error) {
@@ -28,6 +36,36 @@ axiosPost.interceptors.request.use(
     }
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosComment.interceptors.request.use(
+  (config) => {
+    try {
+      const user = localStorage.getItem("authToken");
+      const parsedUser = JSON.parse(user);
+      if (parsedUser?.Token) {
+        config.headers.Authorization = parsedUser?.Token;
+      }
+      return config;
+    } catch (error) {
+      console.log("interceptors-err", error);
+    }
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosComment.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn("Unauthorized, redirecting to login...");
+      window.location.href = "/login";
+    }
+
     return Promise.reject(error);
   }
 );

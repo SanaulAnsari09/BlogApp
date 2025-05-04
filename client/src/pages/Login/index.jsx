@@ -26,7 +26,7 @@ const Login = () => {
     try {
       const { data } = await axiosUser.post(login, loginForm);
       if (data?.Success) {
-        localStorage.setItem("authToken", data?.Token);
+        localStorage.setItem("authToken", JSON.stringify(data?.User));
         // notifySuccess(data?.Message);
         // setLoginForm({
         //   Password: "",

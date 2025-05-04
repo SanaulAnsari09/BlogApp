@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("authToken");
+const ProtectedRoute = () => {
+  const user = localStorage.getItem("authToken");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
+    if (!user) {
       navigate("/login");
     }
-  }, [token]);
+  }, [user]);
 
-  if (token) {
+  if (user) {
     return <Outlet />;
   }
 };
