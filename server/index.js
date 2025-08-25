@@ -5,9 +5,11 @@ const postRouter = require("./routes/post");
 const commentRouter = require("./routes/comment");
 const cors = require("cors");
 const checkAuth = require("./middleware/checkAuth");
+const uri =
+  "mongodb+srv://helloansar09:qH964hBIrc4VVR9Q@cluster0.xagesdl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // database connection
-connectToDatabase("mongodb://localhost:27017/blogapp");
+connectToDatabase(uri);
 
 const app = express();
 app.use(express.json({ limit: "20mb" }));

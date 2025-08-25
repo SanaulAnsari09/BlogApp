@@ -26,7 +26,6 @@ axiosPost.interceptors.request.use(
     try {
       const user = localStorage.getItem("authToken");
       const parsedUser = JSON.parse(user);
-      console.log("set-user1", user);
       if (parsedUser?.Token) {
         config.headers.Authorization = parsedUser?.Token;
       }

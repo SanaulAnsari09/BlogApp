@@ -28,7 +28,7 @@ const Signup = () => {
         const base64String = reader.result;
         setSignupForm((prev) => ({
           ...prev,
-          Profile: base64String.split(",")[1],
+          Profile: base64String,
         }));
       };
 

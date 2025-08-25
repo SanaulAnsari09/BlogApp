@@ -1,11 +1,17 @@
 @import "tailwindcss";
-
-.ql-toolbar.ql-snow{
-    border: none !important;
-    background-color: #F9FAFB;
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Satisfy&display=swap");
+.ql-toolbar.ql-snow {
+  border: none !important;
+  background-color: #f9fafb;
 }
-.ql-container.ql-snow{
-    border: none !important;
-    background-color: #F9FAFB;
-    min-height: 10rem;
+.ql-container.ql-snow {
+  border: none !important;
+  background-color: #f9fafb;
+  min-height: 10rem;
+}
+.custom-font {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
 }

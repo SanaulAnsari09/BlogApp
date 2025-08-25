@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { axiosUser } from "../../axiosInstance";
 import { login } from "../../endpoint";
-import { notifyError, notifySuccess } from "../../notifyMessage";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+// sanaul@gmail.com - email
+// sanaul - password
+
+// ansar@gmail.com - email
+// ansar  - password
+
 const Login = () => {
   const [loginForm, setLoginForm] = useState({
-    Email: "abujer@gmail.com",
-    Password: "abujer123",
+    Email: "sanaulansari@gmail.com",
+    Password: "sanaul123",
   });
 
   const navigate = useNavigate();
@@ -68,7 +73,7 @@ const Login = () => {
               Password
             </label>
             <input
-              type="text"
+              type="password"
               className="border-2 h-8 px-2 text-gray-700 border-gray-500 outline-0 rounded-sm"
               name="Password"
               placeholder="Enter your password"

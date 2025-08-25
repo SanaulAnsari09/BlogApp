@@ -1,4 +1,5 @@
 const express = require("express");
+const uploadImage = require("../middleware/uploadImage");
 const {
   handleAddPostController,
   handleUpdatePostController,
@@ -8,19 +9,19 @@ const {
   handleAllCategoryListController,
   handleCategoryWiseFitlerContorller,
   handleSinglePostContorller,
-  latestPostController
+  latestPostController,
 } = require("../controller/post");
 
 const router = express.Router();
 
-router.post("/addpost", handleAddPostController);
+router.post("/addpost", uploadImage, handleAddPostController);
 router.post("/updatepost", handleUpdatePostController);
 router.get("/allpostbyuserid", findAllPostByUserIdController);
-router.post("/deletepostbyuser", deletePostsByUserController);
+router.delete("/deletepostbyuser/:id", deletePostsByUserController);
 router.get("/allpost", handleAllPostController);
 router.get("/allcategorylist", handleAllCategoryListController);
 router.get("/postlistbycategory", handleCategoryWiseFitlerContorller);
 router.post("/singlepost", handleSinglePostContorller);
-router.get("/latestpost", latestPostController)
+router.get("/latestpost", latestPostController);
 
 module.exports = router;

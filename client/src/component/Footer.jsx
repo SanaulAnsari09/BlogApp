@@ -6,7 +6,7 @@ import { FaYoutubeSquare } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="w-full h-60 bg-white flex justify-center">
+    <div className="w-full h-60 bg-white flex justify-center" style={{color:'white'}}>
       <div className="w-full max-w-[1200px] flex flex-col items-center justify-center">
         <div className="w-full h-30 gap-20 flex items-center justify-center">
           <div className="h-8 w-16">

@@ -1,30 +1,16 @@
 const Post = require("../modal/Post");
-const cloudinary = require("../config/cloudinary");
 
 const handleAddPostController = async (req, res) => {
   try {
     const body = req.body;
     const user = req.user;
+    const imageUrl = req.imgUrl;
+
     if (!body?.Title || !body?.Category || !body?.Tag || !body?.Description) {
       return res
         .status(400)
         .json({ Message: "All field's are required", Success: false });
     }
-
-    let imageUrl = "";
-
-    
-    if (body?.Image) {
-      console.log("images-s")
-      const result = await cloudinary.uploader.upload(body?.Image, {
-        folder: "Post",
-      });
-      console.log("images-b")
-
-      imageUrl = result.secure_url;
-    }
-
-    console.log("image-url", imageUrl);
 
     const addPost = await Post.insertOne({
       ...body,
@@ -40,7 +26,6 @@ const handleAddPostController = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('image-error', error);
     return res.status(500).json({ Message: error.message, Success: false });
   }
 };
@@ -54,24 +39,31 @@ const handleUpdatePostController = async (req, res) => {
       !body?.Tag ||
       !body?.Category ||
       !body?.Description ||
-      !body?.UserId
+      !body?.UserId ||
+      !body?._id
     ) {
       return res
         .status(400)
         .json({ Message: "All field's are required", Success: false });
     }
+    const user = req.user;
 
-    const updatePost = await Post.updateOne({ _id: body?._id }, { $set: body });
+    const updatePost = await Post.updateOne(
+      { _id: body?._id, UserId: user?._id },
+      { $set: body }
+    );
 
-    if (updatePost?.acknowledged && updatePost?.modifiedCount > 0) {
+    if (updatePost?.modifiedCount === 0) {
+      return res
+        .status(200)
+        .json({ Message: "Post not found or access denied !", Success: true });
+    }
+
+    if (updatePost?.modifiedCount >= 1) {
       return res
         .status(200)
         .json({ Message: "Post updated successfully !", Success: true });
     }
-
-    return res
-      .status(200)
-      .json({ Message: "Post updating failed!", Success: false });
   } catch (error) {
     return res.status(500).json({ Messae: error?.message, Success: false });
   }
@@ -96,27 +88,26 @@ const findAllPostByUserIdController = async (req, res) => {
 
 const deletePostsByUserController = async (req, res) => {
   try {
-    const postId = req.body._id;
+    const postId = req?.params.id;
 
-    const findPost = await Post.findOne({ _id: postId });
+    const user = req.user;
 
-    if (!findPost) {
+    const deleted = await Post.deleteOne({
+      _id: postId,
+      UserId: user?._id?.toString(),
+    });
+
+    if (deleted.deletedCount === 0) {
       return res
-        .status(200)
-        .json({ Message: "Post doesn't exist", Success: false });
+        .status(400)
+        .json({ Message: "Post not found or action denied!", Success: false });
     }
 
-    const deleted = await Post.deleteOne({ _id: postId });
-
-    if (deleted?.acknowledged && deleted?.deletedCount > 1) {
+    if (deleted?.deletedCount >= 1) {
       return res
         .status(200)
         .json({ Message: "Post deleted successfully !", Success: true });
     }
-
-    return res
-      .status(200)
-      .json({ Message: "Post deleting failed", Success: false });
   } catch (error) {
     return res.status(500).json({ Message: error.message, Success: false });
   }
@@ -216,6 +207,8 @@ const latestPostController = async (req, res) => {
     return res.status(500).json({ Message: error?.message, Success: false });
   }
 };
+
+// const handlePostListByUserId
 
 module.exports = {
   handleAddPostController,

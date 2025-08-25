@@ -24,3 +24,6 @@ This is the structure of a object of blog
   createdAt: "2025-04-12T09:00:00Z",
   updatedAt: "2025-04-13T09:30:00Z"
 }
+
+
+// connections strings = 
