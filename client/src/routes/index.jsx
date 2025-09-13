@@ -11,6 +11,8 @@ import Blog from "../pages/Blog";
 import Profile from "../pages/Profile/index";
 import SingleCategoryList from "../pages/Category/SigleCategoryList";
 import SinglePost from "../pages/SinglePost";
+import About from "../pages/About";
+import Contact from "../pages/Contact";
 
 const index = () => {
   const allRoutes = [
@@ -23,12 +25,28 @@ const index = () => {
       component: <Blog />,
     },
     {
+      path: "/about",
+      component: <About />,
+    },
+    {
+      path: "/contact",
+      component: <Contact />,
+    },
+    {
+      path: "/blog/post",
+      component: <SinglePost />,
+    },
+    {
       path: "/category",
       component: <Category />,
     },
     {
       path: "/category/:catt",
       component: <SingleCategoryList />,
+    },
+    {
+      path: "/category/:catt/post",
+      component: <SinglePost />,
     },
     {
       path: "/createblog",
@@ -41,10 +59,6 @@ const index = () => {
     {
       path: "/profile",
       component: <Profile />,
-    },
-    {
-      path: "/singlepost/:id",
-      component: <SinglePost />,
     },
   ];
 

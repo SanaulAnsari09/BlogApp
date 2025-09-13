@@ -381,8 +381,8 @@ const CreateBlog = () => {
 
   return (
     <Layout>
-      <div className="w-full flex justify-center items-start bg-gray-50 min-h-screen py-8">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="w-full flex justify-center items-start min-h-screen mt-20 mb-10">
+        <div className="w-full max-w-4xl rounded-lg border border-gray-200 overflow-hidden">
           <div className="p-6 md:p-8">
             <Toaster position="top-center" />
             <h1 className="text-2xl font-bold text-gray-800 mb-6">
@@ -486,11 +486,11 @@ const CreateBlog = () => {
                       {category.label}
                     </option>
                   ))} */}
-                   <option value="">Select</option>
-                   <option value="technology">Technology</option>
-                   <option value="fashion">Fashion</option>
-                   <option value="sports">Sports</option>
-                   <option value="entertainment">Entertainment</option>
+                  <option value="">Select</option>
+                  <option value="technology">Technology</option>
+                  <option value="fashion">Fashion</option>
+                  <option value="sports">Sports</option>
+                  <option value="entertainment">Entertainment</option>
                 </select>
               </div>
 
