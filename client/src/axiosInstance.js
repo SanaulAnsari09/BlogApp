@@ -14,6 +14,36 @@ export const axiosPost = axios.create({
   },
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const axiosComment = axios.create({
   baseURL: "http://localhost:8080/comment",
   headers: {

@@ -3,15 +3,16 @@ import { useNavigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
   const user = localStorage.getItem("authToken");
+  const authUser = JSON.parse(user);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!authUser) {
       navigate("/login");
     }
-  }, [user]);
+  }, [authUser]);
 
-  if (user) {
+  if (authUser) {
     return <Outlet />;
   }
 };

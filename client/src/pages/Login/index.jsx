@@ -130,8 +130,14 @@ const Login = () => {
     setIsLoading(true);
     try {
       const { data } = await axiosUser.post(login, loginForm);
+
       if (data?.Success) {
-        localStorage.setItem("authToken", JSON.stringify(data?.User));
+        
+        localStorage.setItem( 
+          "authToken", 
+          JSON.stringify(data?.User)
+        );
+
         toast.success(data?.Message || "Login successful!");
         navigate("/");
       }

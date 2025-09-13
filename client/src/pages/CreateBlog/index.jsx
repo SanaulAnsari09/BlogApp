@@ -341,7 +341,7 @@ const CreateBlog = () => {
       if (data?.Success) {
         notifySuccess(data?.Message);
         resetForm();
-        navigate("/"); // Redirect after successful submission
+        navigate("/"); 
       }
     } catch (error) {
       console.error("Error submitting blog:", error);

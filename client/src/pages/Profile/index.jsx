@@ -60,7 +60,7 @@ const Profile = () => {
   };
 
   const handleUpdatePost = (data) => {
-    navigate("/createblog", { state: data });
+    navigate("/createblog", {state:data});
   };
 
   return (
