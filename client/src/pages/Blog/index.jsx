@@ -132,21 +132,6 @@ const Blog = () => {
                 />
               </svg>
             </div>
-
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              <span className="text-gray-600 text-sm whitespace-nowrap">
-                Sort by:
-              </span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-              >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="title">Title (A-Z)</option>
-              </select>
-            </div>
           </div>
 
           {/* Results Count */}

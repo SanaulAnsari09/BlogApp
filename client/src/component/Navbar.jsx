@@ -162,7 +162,6 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
@@ -183,7 +182,6 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Implement logout logic here
     console.log("User logged out");
   };
 
@@ -194,7 +192,6 @@ const Navbar = () => {
       }`}
     >
       <div className="h-full w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
-        {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2">
           <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg">
             B
@@ -204,7 +201,6 @@ const Navbar = () => {
           </span>
         </NavLink>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center flex-1 max-w-2xl mx-8">
           <ul className="flex gap-1">
             {pathItem?.map((item, ind) => (
@@ -227,41 +223,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Right side actions */}
         <div className="flex items-center gap-4">
-          {/* Search */}
-          <div className="relative">
-            {isSearchOpen ? (
-              <form
-                onSubmit={handleSearch}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-lg rounded-full pl-4 pr-2 py-1 flex items-center border border-gray-200"
-              >
-                <input
-                  type="text"
-                  placeholder="Search articles..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  autoFocus
-                  className="outline-none text-sm w-64"
-                />
-                <button
-                  type="submit"
-                  className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white ml-2"
-                >
-                  <FaSearchengin size={14} />
-                </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className="h-10 w-10 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors"
-              >
-                <FaSearchengin size={18} />
-              </button>
-            )}
-          </div>
-
-          {/* Write button */}
           <NavLink
             to="/createblog"
             className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg"
@@ -270,13 +232,6 @@ const Navbar = () => {
             <span>Write</span>
           </NavLink>
 
-          {/* Notifications */}
-          <button className="h-10 w-10 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors relative">
-            <FaBell size={18} />
-            <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>
-          </button>
-
-          {/* Profile dropdown */}
           <div className="relative">
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -299,24 +254,12 @@ const Navbar = () => {
                 }`}
               />
             </button>
-
-            {/* Dropdown menu */}
             {isProfileOpen && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                 <div className="px-4 py-2 border-b border-gray-100">
                   <p className="text-sm font-medium text-gray-900">John Doe</p>
                   <p className="text-xs text-gray-500">john.doe@example.com</p>
                 </div>
-
-                <NavLink
-                  to="/dashboard"
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                  onClick={() => setIsProfileOpen(false)}
-                >
-                  <MdDashboard size={16} />
-                  <span>Dashboard</span>
-                </NavLink>
-
                 <NavLink
                   to="/profile"
                   className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -337,16 +280,12 @@ const Navbar = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile menu button */}
         <button className="md:hidden flex flex-col gap-1.5 w-6 h-6">
           <span className="w-full h-0.5 bg-gray-600 rounded"></span>
           <span className="w-full h-0.5 bg-gray-600 rounded"></span>
           <span className="w-full h-0.5 bg-gray-600 rounded"></span>
         </button>
       </div>
-
-      {/* Mobile search overlay */}
       {isSearchOpen && (
         <div
           className="fixed inset-0 bg-black/20 z-40 md:hidden"

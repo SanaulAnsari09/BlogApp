@@ -1,4 +1,3 @@
-// Contact.jsx
 import React, { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Layout from "../../component/Layout";
@@ -21,7 +20,6 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
     toast.success("Message sent successfully! We will get back to you soon.");
     setFormData({
       name: "",
