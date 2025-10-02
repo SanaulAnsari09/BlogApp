@@ -64,8 +64,8 @@ const SingleCategoryList = () => {
 
   return (
     <Layout>
-      <div className="w-full flex justify-center my-18 px-4">
-        <div className="w-full max-w-[1200px]">
+      <div className="w-full flex justify-center my-18">
+        <div className="w-full max-w-[1250px]">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800 capitalize">
               {catt}

@@ -98,7 +98,7 @@ const Blog = () => {
   return (
     <Layout>
       <div className="w-full flex justify-center my-16 min-h-[calc(100vh-120px)]">
-        <div className="w-full max-w-[1200px] px-4">
+        <div className="w-full max-w-[1250px]">
           {/* Header Section */}
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">

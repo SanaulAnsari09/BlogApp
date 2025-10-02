@@ -11,7 +11,6 @@ import { Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AiFillPlusCircle } from "react-icons/ai";
 
-
 const CreateBlog = () => {
   const [blogForm, setBlogForm] = useState(createBlogInitialPayload);
   const [editorValue, setEditorValue] = useState("");
@@ -107,7 +106,7 @@ const CreateBlog = () => {
       if (data?.Success) {
         notifySuccess(data?.Message);
         resetForm();
-        navigate("/"); 
+        navigate("/");
       }
     } catch (error) {
       console.error("Error submitting blog:", error);
@@ -148,14 +147,12 @@ const CreateBlog = () => {
   return (
     <Layout>
       <div className="w-full flex justify-center items-start min-h-screen mt-20 mb-10">
-        <div className="w-full max-w-4xl rounded-lg border border-gray-200 overflow-hidden">
+        <div className="w-full max-w-[1250px] rounded-lg border border-gray-200 overflow-hidden">
           <div className="p-6 md:p-8">
             <Toaster position="top-center" />
             <h1 className="text-2xl font-bold text-gray-800 mb-6">
               {isUpdating ? "Edit Blog Post" : "Create New Blog Post"}
             </h1>
-
-            {/* Title */}
             <div className="mb-6">
               <label
                 htmlFor="title"
@@ -175,8 +172,6 @@ const CreateBlog = () => {
                 rows={1}
               />
             </div>
-
-            {/* Image Upload */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Featured Image
@@ -228,8 +223,6 @@ const CreateBlog = () => {
                 />
               </div>
             </div>
-
-            {/* Category and Tags */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* Category */}
               <div>
@@ -314,8 +307,6 @@ const CreateBlog = () => {
                 </p>
               </div>
             </div>
-
-            {/* Content Editor */}
             <div className="mb-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content
@@ -339,8 +330,6 @@ const CreateBlog = () => {
                 />
               </div>
             </div>
-
-            {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
               <button
                 type="button"

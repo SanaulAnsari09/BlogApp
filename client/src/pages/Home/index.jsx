@@ -48,16 +48,13 @@ const Home = () => {
   }, []);
 
   function stripHtml(html) {
-    return html.replace(/<[^>]+>/g, ""); // removes all tags
+    return html.replace(/<[^>]+>/g, "");
   }
 
-  // Example usage:
   const Description = (description) => {
     const textOnly = stripHtml(description);
     return textOnly;
   };
-
-  console.log("categoryList", categoryList);
 
   return (
     <>

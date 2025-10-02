@@ -4,8 +4,8 @@ import Layout from "../../component/Layout";
 const About = () => {
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 mt-20 mb-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen mt-20 mb-12">
+        <div className="max-w-[1250px] mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               About Blogosphere

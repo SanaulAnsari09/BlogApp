@@ -31,9 +31,9 @@ const Contact = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 mt-20 mb-12">
-        <Toaster position="top-right" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full min-h-screen mt-20 mb-12 flex justify-center">
+        <Toaster position="top-right"/>
+        <div className="max-w-[1250px]">
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">

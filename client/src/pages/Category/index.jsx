@@ -45,12 +45,11 @@ const Category = () => {
     </div>
   );
 
-  // Error state component
   if (error) {
     return (
       <Layout>
         <div className="w-full flex justify-center my-4">
-          <div className="w-full max-w-[1200px] p-4">
+          <div className="w-full max-w-[1250px] py-4">
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
               <p className="text-red-600 mb-4">{error}</p>
               <button
@@ -69,7 +68,7 @@ const Category = () => {
   return (
     <Layout>
       <div className="w-full flex justify-center my-16">
-        <div className="w-full max-w-[1200px] px-4">
+        <div className="w-full max-w-[1250px]">
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Blog Categories

@@ -67,7 +67,7 @@ const Profile = () => {
     <Layout>
       <div className="w-full flex justify-center bg-gray-50 min-h-screen mt-16">
         <Toaster position="top-center" />
-        <div className="w-full max-w-[1200px] py-8 px-4 md:px-6 min-h-[calc(100vh-150px)]">
+        <div className="w-full max-w-[1250px] py-8 min-h-[calc(100vh-150px)]">
           {/* Profile Header Section */}
           <div className="w-full flex flex-col md:flex-row gap-8 md:gap-10 items-center md:items-start mb-12">
             <div className="w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white shadow-lg">
