@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../component/Layout";
-import PieCircleChart from "../../component/PieCircleChart";
 import { axiosPost, axiosUser } from "../../axiosInstance";
 import { allPostByUser, deletePostByUser, getUserDetais } from "../../endpoint";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,7 @@ import { notifySuccess } from "../../notifyMessage";
 import { Toaster } from "react-hot-toast";
 import { FaPencilAlt } from "react-icons/fa";
 import SkeletonLoader from "../../component/SkeletonLoader";
-import { getFormattedDate,readingTime } from "../../utile";
+import { getFormattedDate, readingTime } from "../../utile";
 
 const Profile = () => {
   const [postList, setPostList] = useState([]);
@@ -82,14 +81,11 @@ const Profile = () => {
     navigate("/createblog", { state: data });
   };
 
-  
-
   return (
     <Layout>
       <div className="w-full flex justify-center bg-gray-50 min-h-screen mt-16">
         <Toaster position="top-center" />
         <div className="w-full max-w-[1250px] py-8 min-h-[calc(100vh-150px)]">
-          {/* Profile Header Section */}
           <div className="w-full flex flex-col md:flex-row gap-8 md:gap-10 items-center md:items-start mb-12">
             <div className="w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
@@ -138,8 +134,6 @@ const Profile = () => {
               <span>New Post</span>
             </button>
           </div>
-
-          {/* Posts Grid Section */}
           <div className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
               Your Posts

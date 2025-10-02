@@ -57,7 +57,6 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Header Section */}
         <div className="bg-indigo-600 py-5 px-6 text-center">
           <h1 className="text-2xl font-bold text-white">Blogosphere</h1>
           <p className="text-indigo-100 mt-1">
@@ -72,8 +71,6 @@ const Login = () => {
           <p className="text-gray-600 mb-6">
             Enter your credentials to access your account
           </p>
-
-          {/* Email Input */}
           <div className="mb-5">
             <label
               htmlFor="email"
@@ -132,8 +129,6 @@ const Login = () => {
               </div>
             </div>
           </div>
-
-          {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <input
@@ -159,8 +154,6 @@ const Login = () => {
               </a>
             </div>
           </div>
-
-          {/* Login Button */}
           <button
             className={`w-full py-3 px-4 rounded-lg text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ${
               isLoading
@@ -198,8 +191,6 @@ const Login = () => {
               "Sign in"
             )}
           </button>
-
-          {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
@@ -216,8 +207,6 @@ const Login = () => {
             </p>
           </div>
         </div>
-
-        {/* Demo Accounts Info */}
         <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
             Demo accounts: sanaul@gmail.com (sanaul) | ansar@gmail.com (ansar)

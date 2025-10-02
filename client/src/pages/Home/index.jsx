@@ -11,12 +11,11 @@ const Home = () => {
   const [categoryList, setCategoryList] = useState([]);
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalRecords, setTotalRecords] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
   const [popularPost, setPopularPost] = useState([]);
   const [popularLoading, setPopularLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
+  const [limit] = useState(6);
   const [error, setError] = useState(null);
 
   const fetchAllPost = async () => {
@@ -28,7 +27,6 @@ const Home = () => {
       );
       setPostList(data?.PostList || []);
       setTotalPage(data?.TotalPage || 1);
-      setTotalRecords(data?.TotalRecords || 0);
       setPage(data?.Page || 1);
     } catch (error) {
       console.error("Error fetching posts:", error);
