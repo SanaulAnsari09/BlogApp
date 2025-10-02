@@ -1,125 +1,9 @@
-// import React, { useState } from "react";
-// import { NavLink, useLocation } from "react-router-dom";
-// import { FaPenToSquare } from "react-icons/fa6";
-// import { AiFillProfile } from "react-icons/ai";
-
-// const pathItem = [
-//   {
-//     name: "Home",
-//     path: "/",
-//     active: ["/"],
-//   },
-//   {
-//     name: "Blog's",
-//     path: "/blog",
-//     active: ["/blog"],
-//   },
-//   {
-//     name: "Category",
-//     path: "/category",
-//     active: ["/category"],
-//   },
-// ];
-
-// const Navbar = () => {
-//   const { pathname } = useLocation();
-//   const [isProfile, setIsProfile] = useState(false);
-
-//   return (
-//     <nav className="h-16 w-full bg-[#F5F5F5] shadow-sm">
-//       <div className="h-full w-full max-w-[1200px] mx-auto flex items-center justify-between">
-//         <div className="w-[20%]">
-//           <div className="h-8 w-16">
-//             <img
-//               src="/assets/blog-logo.png"
-//               alt="logo"
-//               className="h-full w-full object-fill"
-//             />
-//           </div>
-//         </div>
-//         <div className="w-[80%] hidden md:flex justify-between items-center">
-//           <div className="flex items-center">
-//             <ul className="flex gap-5">
-//               {pathItem?.map((item, ind) => {
-//                 return (
-//                   <NavLink
-//                     key={ind}
-//                     to={item?.path}
-//                     className={`list-none cursor-pointer hover:bg-blue-400 hover:rounded hover:text-white py-1 px-2 transition-colors duration-400 rounded ${
-//                       item?.active?.some((p) =>
-//                         item?.name == "Home"
-//                           ? pathname == p
-//                           : pathname?.includes(p)
-//                       ) && "bg-blue-400 text-white"
-//                     }`}
-//                   >
-//                     {item?.name}
-//                   </NavLink>
-//                 );
-//               })}
-//             </ul>
-//           </div>
-//           <div className="flex items-center gap-8 overflow-hidden">
-//             <NavLink
-//               to="/createblog"
-//               className={`list-none cursor-pointe hover:bg-blue-400 hover:rounded hover:text-white py-1 px-2 transition-colors duration-400 rounded
-//                     ${
-//                       pathname == "/createblog"
-//                         ? "bg-blue-400 text-white"
-//                         : "bg-gray-200 text-black"
-//                     }
-//                   `}
-//             >
-//               <div className="w-full flex gap-2 items-center">
-//                 <span>
-//                   <FaPenToSquare />
-//                 </span>
-//                 <span>Write</span>
-//               </div>
-//             </NavLink>
-//             <button className="bg-orange-400 py-1 px-2 text-white rounded font-semibold cursor-pointer">
-//               Logout
-//             </button>
-//             <div className="flex relative">
-//               <div
-//                 className="h-12 w-12 border-2 border-gray-400 rounded-full cursor-pointer"
-//                 onClick={() => setIsProfile(!isProfile)}
-//               >
-//                 <img
-//                   src="https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg"
-//                   alt=""
-//                   className="h-full w-full rounded-full"
-//                 />
-//               </div>
-//               <NavLink
-//                 to={"/profile"}
-//                 className={`absolute h-8 rounded w-20 bg-gray-600 flex items-center justify-center text-white font-light gap-2 cursor-pointer top-[0.5rem] z-50 transition-[right] duration-150 ease-in-out ${
-//                   isProfile ? "right-[4.5rem]" : "right-[-5.5rem]"
-//                 }`}
-//               >
-//                 <AiFillProfile />
-//                 <span>Profile</span>
-//               </NavLink>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import {
-  FaPenToSquare,
-  FaBell,
-  FaChevronDown,
-  FaSearchengin,
-} from "react-icons/fa6";
+import { FaPenToSquare, FaChevronDown } from "react-icons/fa6";
 import { AiFillProfile, AiOutlineLogout } from "react-icons/ai";
-import { MdDashboard } from "react-icons/md";
+import { axiosUser } from "../axiosInstance";
+import { getUserDetais } from "../endpoint";
 
 const pathItem = [
   {
@@ -161,6 +45,9 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const authData = localStorage.getItem("authToken");
+  const parsedAuth = JSON.parse(authData);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,8 +68,26 @@ const Navbar = () => {
     }
   };
 
+  async function getUserDetails() {
+    try {
+      const { data } = await axiosUser.get(getUserDetais, {
+        params: { userId: parsedAuth?.Id },
+      });
+      setUserDetails(data?.User);
+    } catch (error) {
+      console.log("allpost-err", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
   const handleLogout = () => {
-    console.log("User logged out");
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
 
   return (
@@ -239,13 +144,13 @@ const Navbar = () => {
             >
               <div className="h-8 w-8 rounded-full overflow-hidden">
                 <img
-                  src="https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg"
+                  src={userDetails?.Profile}
                   alt="Profile"
                   className="h-full w-full object-cover"
                 />
               </div>
               <span className="text-sm font-medium text-gray-700 hidden lg:block">
-                John Doe
+                {userDetails?.FirstName}
               </span>
               <FaChevronDown
                 size={12}
@@ -257,8 +162,8 @@ const Navbar = () => {
             {isProfileOpen && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                 <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900">John Doe</p>
-                  <p className="text-xs text-gray-500">john.doe@example.com</p>
+                  <p className="text-sm font-medium text-gray-900">{`${userDetails?.FirstName} ${userDetails?.LastName}`}</p>
+                  <p className="text-xs text-gray-500">{userDetails?.Email}</p>
                 </div>
                 <NavLink
                   to="/profile"

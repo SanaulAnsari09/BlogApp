@@ -4,6 +4,7 @@ export const signupInitialPayload = {
   Email: "",
   Profile: "",
   Password: "",
+  Bio:""
 };
 export const createBlogInitialPayload = {
   Title: "",

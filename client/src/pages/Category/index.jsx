@@ -3,6 +3,7 @@ import Layout from "../../component/Layout";
 import { allCategoryList } from "../../endpoint";
 import { axiosPost } from "../../axiosInstance";
 import { NavLink } from "react-router-dom";
+import SkeletonLoader from "../../component/SkeletonLoader";
 
 const Category = () => {
   const [postList, setPostList] = useState([]);
@@ -26,24 +27,6 @@ const Category = () => {
   useEffect(() => {
     fetchCategoryList();
   }, []);
-
-  // Skeleton loader component
-  const SkeletonLoader = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {[...Array(8)].map((_, index) => (
-        <div
-          key={index}
-          className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse"
-        >
-          <div className="h-48 bg-gray-200"></div>
-          <div className="p-4">
-            <div className="h-6 bg-gray-200 rounded mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   if (error) {
     return (
@@ -79,7 +62,7 @@ const Category = () => {
           </div>
 
           {loading ? (
-            <SkeletonLoader />
+            <SkeletonLoader num={4} />
           ) : (
             <>
               {postList.length === 0 ? (
@@ -132,7 +115,7 @@ const Category = () => {
                           </h3>
                           <div className="mt-4 flex justify-between items-center">
                             <span className="text-sm text-gray-500">
-                              {post?.count || 0} articles
+                              {post?.Count || 0} articles
                             </span>
                             <span className="text-blue-600 group-hover:underline text-sm font-medium">
                               Explore →

@@ -10,6 +10,8 @@ const {
   handleCategoryWiseFitlerContorller,
   handleSinglePostContorller,
   latestPostController,
+  getMostCommentedPostsController,
+  getRelatedPOstController
 } = require("../controller/post");
 
 const router = express.Router();
@@ -23,5 +25,7 @@ router.get("/allcategorylist", handleAllCategoryListController);
 router.get("/postlistbycategory", handleCategoryWiseFitlerContorller);
 router.post("/singlepost", handleSinglePostContorller);
 router.get("/latestpost", latestPostController);
+router.get("/getpopularpost", getMostCommentedPostsController);
+router.get("/gerrelatedpost", getRelatedPOstController);
 
 module.exports = router;

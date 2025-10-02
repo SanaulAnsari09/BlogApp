@@ -10,3 +10,6 @@ export const postListByCategory = "/postlistbycategory";
 export const singlepostById = "/singlepost";
 export const addCommentEndpoint = "/addcomment";
 export const getCommentByPostId = "/getcomments";
+export const getPopularPost = "/getpopularpost";
+export const getUserDetais = "/getuserdetails";
+export const getRelatedPost = "/gerrelatedpost";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../component/Layout";
 import { allPots } from "../../endpoint";
 import { axiosPost } from "../../axiosInstance";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SkeletonLoader from "../../component/SkeletonLoader";
 
 const Blog = () => {
@@ -10,20 +10,27 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-
-  const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceSearch(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   const fetchAllPost = async () => {
     try {
       setLoading(true);
       setError(null);
       const { data } = await axiosPost.get(
-        `${allPots}?page=${page}&limit=${limit}`
+        `${allPots}?page=${page}&limit=${limit}&search=${debounceSearch}`
       );
       setPostList(data?.PostList || []);
       setTotalPages(data?.TotalPage || 1);
@@ -39,22 +46,17 @@ const Blog = () => {
 
   useEffect(() => {
     fetchAllPost();
-  }, [page]);
+  }, [page, debounceSearch]);
 
   const handleNavigate = (id) => {
     navigate("/blog/post", { state: { Id: id } });
   };
 
-  // Skeleton loader component
-
-  // Format date function
   const formatDate = (dateString) => {
     if (!dateString) return "Unknown date";
     const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
-  // Truncate HTML content to plain text
   const stripHtml = (html) => {
     if (!html) return "";
     const tmp = document.createElement("DIV");
@@ -66,7 +68,6 @@ const Blog = () => {
     <Layout>
       <div className="w-full flex justify-center my-16 min-h-[calc(100vh-120px)]">
         <div className="w-full max-w-[1250px]">
-          {/* Header Section */}
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Blog Posts
@@ -75,8 +76,6 @@ const Blog = () => {
               Discover our latest articles and insights
             </p>
           </div>
-
-          {/* Search and Filter Bar */}
           <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between items-start md:items-center">
             <div className="relative w-full md:w-1/2">
               <input
@@ -100,8 +99,6 @@ const Blog = () => {
               </svg>
             </div>
           </div>
-
-          {/* Results Count */}
           {!loading && (
             <div className="mb-4 text-sm text-gray-600">
               Showing {postList.length} of {totalRecords} posts
@@ -113,8 +110,6 @@ const Blog = () => {
               )}
             </div>
           )}
-
-          {/* Error State */}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-8">
               <p className="text-red-600 mb-4">{error}</p>
@@ -126,8 +121,6 @@ const Blog = () => {
               </button>
             </div>
           )}
-
-          {/* Blog Posts Grid */}
           {loading ? (
             <SkeletonLoader />
           ) : postList.length === 0 ? (
@@ -192,7 +185,6 @@ const Blog = () => {
                   </div>
                 ))}
               </div>
-
               <div className="flex justify-center items-center gap-4 mt-8">
                 <button
                   disabled={page === 1}

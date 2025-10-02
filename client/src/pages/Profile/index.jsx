@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../component/Layout";
 import PieCircleChart from "../../component/PieCircleChart";
-import { axiosPost } from "../../axiosInstance";
-import { allPostByUser, deletePostByUser } from "../../endpoint";
+import { axiosPost, axiosUser } from "../../axiosInstance";
+import { allPostByUser, deletePostByUser, getUserDetais } from "../../endpoint";
 import { useNavigate } from "react-router-dom";
 import { FaTrashCan } from "react-icons/fa6";
 import { FiEdit2 } from "react-icons/fi";
 import { notifySuccess } from "../../notifyMessage";
 import { Toaster } from "react-hot-toast";
+import { FaPencilAlt } from "react-icons/fa";
+import SkeletonLoader from "../../component/SkeletonLoader";
+import { getFormattedDate,readingTime } from "../../utile";
 
 const Profile = () => {
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [activeDeleteId, setActiveDeleteId] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
   const navigate = useNavigate();
 
   const authData = localStorage.getItem("authToken");
@@ -30,11 +34,26 @@ const Profile = () => {
       setLoading(false);
     }
   }
+  async function getUserDetails() {
+    try {
+      const { data } = await axiosUser.get(getUserDetais, {
+        params: { userId: parsedAuth?.Id },
+      });
+      setUserDetails(data?.User);
+      console.log("user-details", data);
+    } catch (error) {
+      console.log("allpost-err", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
   const statsData = [
     { name: "Posts", value: postList.length, color: "#0088FE" },
-    { name: "Reads", value: 500, color: "#00C49F" },
-    { name: "Reach", value: 3500, color: "#FFBB28" },
   ];
 
   useEffect(() => {
@@ -60,8 +79,10 @@ const Profile = () => {
   };
 
   const handleUpdatePost = (data) => {
-    navigate("/createblog", {state:data});
+    navigate("/createblog", { state: data });
   };
+
+  
 
   return (
     <Layout>
@@ -72,7 +93,7 @@ const Profile = () => {
           <div className="w-full flex flex-col md:flex-row gap-8 md:gap-10 items-center md:items-start mb-12">
             <div className="w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
-                src={parsedAuth?.Profile || "/assets/user-profile.jpg"}
+                src={userDetails?.Profile || "/assets/user-profile.jpg"}
                 className="w-full h-full object-cover"
                 alt="Profile"
               />
@@ -80,17 +101,14 @@ const Profile = () => {
 
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                {parsedAuth?.Name || "Jeremy Rose"}
+                {`${userDetails?.FirstName} ${userDetails?.LastName}` ||
+                  "Jeremy Rose"}
               </h1>
               <span className="text-sm font-medium text-blue-500 bg-blue-50 px-3 py-1 rounded-full">
                 Content Writer
               </span>
 
-              <p className="text-gray-600 mt-4 max-w-2xl">
-                Passionate about creating engaging content that resonates with
-                readers. Specializing in technology, lifestyle, and personal
-                development topics.
-              </p>
+              <p className="text-gray-600 mt-4 max-w-2xl">{userDetails?.Bio}</p>
 
               <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-6">
                 {statsData.map((stat, index) => (
@@ -128,17 +146,7 @@ const Profile = () => {
             </h2>
 
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[...Array(8)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-lg overflow-hidden shadow"
-                  >
-                    {/* <Skeleton height={180} /> */}
-                    <div className="p-4">{/* <Skeleton count={3} /> */}</div>
-                  </div>
-                ))}
-              </div>
+              <SkeletonLoader />
             ) : postList.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {postList.map((post) => (
@@ -148,16 +156,16 @@ const Profile = () => {
                   >
                     <div className="relative group h-48 overflow-hidden">
                       <img
-                        src={post?.Image || "/assets/placeholder-blog.jpg"}
+                        src={post?.Image}
                         alt={post?.Title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-end justify-end p-3">
-                        <div className="flex translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 gap-2">
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition-all duration-300 flex items-end justify-end p-3">
+                        <div className="flex white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 gap-2">
                           <button
                             disabled={isDeleting}
                             onClick={() => handleDeletePost(post?._id)}
-                            className={`h-9 w-9 rounded-full flex justify-center items-center text-white ${
+                            className={`h-9 w-9 rounded-full flex justify-center items-center text-white  cursor-pointer ${
                               isDeleting && activeDeleteId === post?._id
                                 ? "bg-red-400 cursor-not-allowed"
                                 : "bg-red-500 hover:bg-red-600"
@@ -168,10 +176,10 @@ const Profile = () => {
                           </button>
                           <button
                             onClick={() => handleUpdatePost(post)}
-                            className="h-9 w-9 rounded-full flex justify-center items-center bg-green-500 hover:bg-green-600 text-white"
+                            className="h-9 w-9 rounded-full flex justify-center items-center bg-green-500 hover:bg-green-600 text-white cursor-pointer"
                             aria-label="Edit post"
                           >
-                            {/* <FaPencilAlt size={12} /> */}
+                            <FaPencilAlt size={12} />
                           </button>
                         </div>
                       </div>
@@ -186,12 +194,8 @@ const Profile = () => {
                         dangerouslySetInnerHTML={{ __html: post?.Description }}
                       />
                       <div className="flex justify-between items-center text-xs text-gray-500 pt-2 border-t border-gray-100">
-                        <span>
-                          {new Date(
-                            post?.createdAt || Date.now()
-                          ).toLocaleDateString()}
-                        </span>
-                        <span>5 min read</span>
+                        <span>{getFormattedDate(post?.createdAt)}</span>
+                        <span>{readingTime(post?.Description)} min read</span>
                       </div>
                     </div>
                   </div>
@@ -226,7 +230,6 @@ const Profile = () => {
                   onClick={() => navigate("/createblog")}
                   className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
                 >
-                  {/* <FaPenToSquare /> */}
                   <span>Create Your First Post</span>
                 </button>
               </div>

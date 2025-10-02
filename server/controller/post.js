@@ -1,4 +1,5 @@
 const Post = require("../modal/Post");
+const Comment = require("../modal/Comment");
 
 const handleAddPostController = async (req, res) => {
   try {
@@ -114,16 +115,24 @@ const deletePostsByUserController = async (req, res) => {
 };
 
 const handleAllPostController = async (req, res) => {
-  let { limit = 10, page = 1 } = req.query;
+  let { limit = 10, page = 1, search = "" } = req.query;
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
   const skip = (page - 1) * limit;
 
-  try {
-    const totalPost = await Post.countDocuments();
-    const posts = await Post.find({}).skip(skip).limit(limit);
+  const searchQuery = search
+    ? {
+        $or: [
+          { Title: { $regex: search, $options: "i" } },
+          { Tag: { $regex: search, $options: "i" } },
+        ],
+      }
+    : {};
 
+  try {
+    const totalPost = await Post.countDocuments(searchQuery);
+    const posts = await Post.find(searchQuery).skip(skip).limit(limit);
     return res.status(200).json({
       Message: "Fetched all post's",
       TotalRecords: totalPost,
@@ -145,10 +154,18 @@ const handleAllCategoryListController = async (req, res) => {
         $group: {
           _id: "$Category",
           Post: { $first: "$$ROOT" },
+          Count: { $sum: 1 },
         },
       },
       {
-        $replaceRoot: { newRoot: "$Post" },
+        $project: {
+          _id: 0,
+          Category: "$_id",
+          Count: 1,
+          PostId: "$Post._id",
+          Title: "$Post.Title",
+          Image: "$Post.Image",
+        },
       },
     ]);
 
@@ -218,6 +235,95 @@ const latestPostController = async (req, res) => {
   }
 };
 
+const getMostCommentedPostsController = async (req, res) => {
+  try {
+    const { limit = 10, page = 1 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const posts = await Comment.aggregate([
+      {
+        $group: {
+          _id: "$PostId",
+          commentCount: { $sum: 1 },
+        },
+      },
+      { $sort: { commentCount: -1 } },
+      { $skip: parseInt(skip) },
+      { $limit: parseInt(limit) },
+      {
+        $lookup: {
+          from: "posts",
+          localField: "_id",
+          foreignField: "_id",
+          as: "post",
+        },
+      },
+      { $unwind: "$post" },
+      {
+        $project: {
+          _id: "$post._id",
+          Title: "$post.Title",
+          Image: "$post.Image",
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      Message: "Most commented posts fetched successfully",
+      Page: parseInt(page),
+      Limit: parseInt(limit),
+      TotalPosts: posts.length,
+      Success: true,
+      PostList: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      Message: error?.message || "Something went wrong",
+      Success: false,
+    });
+  }
+};
+
+const getRelatedPOstController = async (req, res) => {
+  let { page = 1, limit = 10, category } = req.query;
+
+  if (!category) {
+    return res.status(404).json({
+      message: "Categery not found",
+      success: false,
+    });
+  }
+
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    const post = await Post.find({ Category: category })
+      .skip(skip)
+      .limit(limit);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Related post not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Related post fetched successfully.",
+      success: true,
+      RelatedPost: post,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error?.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   handleAddPostController,
   handleUpdatePostController,
@@ -228,4 +334,6 @@ module.exports = {
   handleCategoryWiseFitlerContorller,
   handleSinglePostContorller,
   latestPostController,
+  getMostCommentedPostsController,
+  getRelatedPOstController,
 };

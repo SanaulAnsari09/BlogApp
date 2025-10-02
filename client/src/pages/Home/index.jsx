@@ -3,7 +3,7 @@ import Navbar from "../../component/Navbar";
 import { FaStar } from "react-icons/fa";
 import Footer from "../../component/Footer";
 import { axiosPost } from "../../axiosInstance";
-import { allCategoryList, allPots } from "../../endpoint";
+import { allCategoryList, allPots, getPopularPost } from "../../endpoint";
 import SkeletonLoader from "../../component/SkeletonLoader";
 
 const Home = () => {
@@ -13,6 +13,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
+  const [popularPost, setPopularPost] = useState([]);
+  const [popularLoading, setPopularLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
   const [error, setError] = useState(null);
@@ -38,6 +40,26 @@ const Home = () => {
 
   useEffect(() => {
     fetchAllPost();
+  }, [page]);
+
+  const fetchPopularPosts = async () => {
+    try {
+      setPopularLoading(true);
+      const { data } = await axiosPost.get(
+        `${getPopularPost}?page=${1}&limit=${6}`
+      );
+      setPopularPost(data?.PostList);
+      console.log("popular-post", data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      setError("Failed to load blog posts. Please try again later.");
+    } finally {
+      setPopularLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPopularPosts();
   }, [page]);
 
   const fetchCategoryList = async () => {
@@ -156,30 +178,30 @@ const Home = () => {
         </section>
         <section className="py-12 md:py-16 bg-gray-50">
           <h2 className="text-center text-gray-700 uppercase tracking-wider text-sm font-semibold mt-16 mb-8 md:mb-12">
-            Most Liked Post's
+            Most Popular Post's
           </h2>
           <div className="container max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {postList?.map((item, index) => (
-                <div
-                  key={index}
-                  className="relative h-80 md:h-96 rounded-xl overflow-hidden group"
-                >
-                  <img
-                    src={item.Image}
-                    alt={item.Title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/50 flex flex-col justify-end p-6 text-white">
-                    <p className="text-sm font-bold uppercase tracking-wider mb-2">
-                      {item.tag}
-                    </p>
-                    <h3 className="text-2xl font-bold mb-2">{item.Title}</h3>
-                    <p className="font-semibold">{item.date}</p>
+            {popularLoading ? (
+              <SkeletonLoader num={4} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {popularPost?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="relative h-80 md:h-96 rounded-xl overflow-hidden group"
+                  >
+                    <img
+                      src={item.Image}
+                      alt={item.Title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/50 flex flex-col justify-end p-6 text-white">
+                      <h3 className="text-2xl font-bold mb-2">{item.Title}</h3>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
         <section className="py-12 md:py-16 bg-blue-50">
@@ -216,32 +238,36 @@ const Home = () => {
         </section>
         <section className="py-12 md:py-16 bg-gray-50">
           <div className="container max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {categoryList?.map((item) => (
-                <div
-                  key={item}
-                  className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      src={item?.Image}
-                      alt="Review thumbnail"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4 text-center">
-                    <h4 className="font-bold text-gray-800 mb-3 line-clamp-2">
-                      {item?.Category}
-                    </h4>
-                    <div className="flex justify-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar key={star} className="text-yellow-400" />
-                      ))}
+            {categoryLoading ? (
+              <SkeletonLoader num={4} />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {categoryList?.map((item) => (
+                  <div
+                    key={item}
+                    className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div className="h-48 overflow-hidden">
+                      <img
+                        src={item?.Image}
+                        alt="Review thumbnail"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-4 text-center">
+                      <h4 className="font-bold text-gray-800 mb-3 line-clamp-2">
+                        {item?.Category}
+                      </h4>
+                      <div className="flex justify-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <FaStar key={star} className="text-yellow-400" />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
         <section className="relative bg-[url('https://images.pexels.com/photos/10186702/pexels-photo-10186702.jpeg')] bg-cover bg-center bg-fixed">

@@ -80,6 +80,31 @@ const handleLoginUser = async (req, res) => {
   }
 };
 
+const getUserDetails = async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    const user = await User.findById(userId).select("-Password");
+
+    if (!user) {
+      return res.status(404).json({
+        Message: "User not found.",
+        Success: false,
+      });
+    }
+    return res.status(200).json({
+      Message: "User details fetched successfuly!",
+      User: user,
+      Success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      Message: error.message,
+      Success: false,
+    });
+  }
+};
+
 async function hashedPassword(password) {
   const saltedCount = 10;
 
@@ -92,4 +117,4 @@ async function hashedPassword(password) {
   }
 }
 
-module.exports = { handleSignupUser, handleLoginUser };
+module.exports = { handleSignupUser, handleLoginUser, getUserDetails };
