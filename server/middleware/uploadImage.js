@@ -8,7 +8,7 @@ const uploadImage = async (req, res, next) => {
       folder: "Post",
     });
     req.imgUrl = result.secure_url;
-    next()
+    next();
   } else {
     req.imgUrl = "";
     next();

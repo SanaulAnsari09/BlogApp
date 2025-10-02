@@ -114,12 +114,22 @@ const deletePostsByUserController = async (req, res) => {
 };
 
 const handleAllPostController = async (req, res) => {
+  let { limit = 10, page = 1 } = req.query;
+
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+  const skip = (page - 1) * limit;
+
   try {
-    const posts = await Post.find({});
+    const totalPost = await Post.countDocuments();
+    const posts = await Post.find({}).skip(skip).limit(limit);
 
     return res.status(200).json({
       Message: "Fetched all post's",
-      TotalPost: posts.length,
+      TotalRecords: totalPost,
+      Page: page,
+      Limit: limit,
+      TotalPage: Math.ceil(totalPost / limit),
       Success: true,
       PostList: posts,
     });
@@ -207,8 +217,6 @@ const latestPostController = async (req, res) => {
     return res.status(500).json({ Message: error?.message, Success: false });
   }
 };
-
-// const handlePostListByUserId
 
 module.exports = {
   handleAddPostController,

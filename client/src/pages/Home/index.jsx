@@ -4,22 +4,32 @@ import { FaStar } from "react-icons/fa";
 import Footer from "../../component/Footer";
 import { axiosPost } from "../../axiosInstance";
 import { allCategoryList, allPots } from "../../endpoint";
+import SkeletonLoader from "../../component/SkeletonLoader";
 
 const Home = () => {
   const [categoryLoading, setCategoryLoading] = useState(false);
-  const [categoryError, setCategoryError] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
   const [error, setError] = useState(null);
 
-  const fetchLatestPost = async () => {
+  const fetchAllPost = async () => {
     try {
       setLoading(true);
       setError(null);
-      const { data } = await axiosPost.get(allPots);
+      const { data } = await axiosPost.get(
+        `${allPots}?page=${page}&limit=${limit}`
+      );
       setPostList(data?.PostList || []);
+      setTotalPage(data?.TotalPage || 1);
+      setTotalRecords(data?.TotalRecords || 0);
+      setPage(data?.Page || 1);
     } catch (error) {
+      console.error("Error fetching posts:", error);
       setError("Failed to load blog posts. Please try again later.");
     } finally {
       setLoading(false);
@@ -27,17 +37,16 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchLatestPost();
-  }, []);
+    fetchAllPost();
+  }, [page]);
 
   const fetchCategoryList = async () => {
     try {
       setCategoryLoading(true);
-      setCategoryError(null);
       const { data } = await axiosPost.get(allCategoryList);
       setCategoryList(data?.TotalPost || []);
     } catch (error) {
-      setCategoryError("Failed to load categories. Please try again later.");
+      console.log("error");
     } finally {
       setCategoryLoading(false);
     }
@@ -93,33 +102,56 @@ const Home = () => {
             <h2 className="text-center text-gray-700 uppercase tracking-wider text-sm font-semibold mt-16 mb-8 md:mb-12">
               Latest Blog Post's
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {postList.map((post, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="h-56 overflow-hidden">
-                    <img
-                      src={post.Image}
-                      alt={post.Title}
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <p className="text-blue-600 font-semibold text-sm uppercase tracking-wide text-center mb-2">
-                      {post.Category}
-                    </p>
-                    <h3 className="text-xl font-bold text-gray-800 text-center mb-3 line-clamp-2">
-                      {post.Title}
-                    </h3>
-                    <p className="text-gray-600 text-center text-sm line-clamp-3">
-                      {Description(post.Description)}
-                    </p>
-                  </div>
+
+            {loading ? (
+              <SkeletonLoader num={8} />
+            ) : (
+              <React.Fragment>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {postList.map((post, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                    >
+                      <div className="h-56 overflow-hidden">
+                        <img
+                          src={post.Image}
+                          alt={post.Title}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-6">
+                        <p className="text-blue-600 font-semibold text-sm uppercase tracking-wide text-center mb-2">
+                          {post.Category}
+                        </p>
+                        <h3 className="text-xl font-bold text-gray-800 text-center mb-3 line-clamp-2">
+                          {post.Title}
+                        </h3>
+                        <p className="text-gray-600 text-center text-sm line-clamp-3">
+                          {Description(post.Description)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+                <div className="w-full flex justify-end items-center gap-4 mt-8">
+                  <button
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                    className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    disabled={page === totalPage}
+                    onClick={() => setPage(page + 1)}
+                    className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </React.Fragment>
+            )}
           </div>
         </section>
         <section className="py-12 md:py-16 bg-gray-50">

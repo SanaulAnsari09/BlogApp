@@ -10,7 +10,7 @@ const handleAddCommentController = async (req, res) => {
         .status(400)
         .json({ Message: "All fields are required", Success: false });
     }
-    const clientUser = req.user; // it's user comming from client side on every request
+    const clientUser = req.user;
     const comment = await Comment.insertOne({
       ...body,
       UserId: clientUser?._id,
@@ -30,10 +30,9 @@ const handleGetCommentByPostIdController = async (req, res) => {
   try {
     const postId = req.query?.id;
 
-    const allComment = await Comment.find({ PostId: postId }).populate(
-      "UserId",
-      "FirstName LastName Profile"
-    ).sort({createdAt:-1})
+    const allComment = await Comment.find({ PostId: postId })
+      .populate("UserId", "FirstName LastName Profile")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       Message: "All comments fetched",

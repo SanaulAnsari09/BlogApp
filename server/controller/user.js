@@ -76,9 +76,7 @@ const handleLoginUser = async (req, res) => {
       Success: true,
     });
   } catch (error) {
-    if (!findUser) {
-      return res.status(200).json({ Message: error?.message, Success: false });
-    }
+    return res.status(200).json({ Message: error?.message, Success: false });
   }
 };
 
